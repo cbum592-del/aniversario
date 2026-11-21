@@ -6,7 +6,7 @@
 <title>Carta de Aniversario</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&family=Libre+Baskerville:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&family=Libre+Baskerville:ital@0;1&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
 <style>
 /* Concepto: carta de amor por pasos. Una sola pantalla visible a la vez, fondo vino, botones rosa pastel. */
 :root {
@@ -17,6 +17,12 @@
   --pill: #ffc2cc;
   --pill-ink: #3a0a12;
   --pill-hover: #ffd3da;
+  --paper: #fbf3e4;
+  --paper-line: rgba(140, 100, 85, .22);
+  --ink-hand: #3a2320;
+  --seal: #8f1d2c;
+  --seal-hi: #b3283b;
+  --font-hand: "Caveat", "Segoe Script", "Bradley Hand", cursive;
   --heart: #ff6b88;
   --font-script: "Mrs Saint Delafield", "Snell Roundhand", cursive;
   --font-serif: "Libre Baskerville", Georgia, "Times New Roman", serif;
@@ -163,6 +169,89 @@ p { margin: 0; line-height: 1.8; font-size: clamp(1rem, 2.6vw, 1.12rem); }
 @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 #t-carta, #t-pregunta, #t-final { text-shadow: 0 0 28px rgba(255, 107, 136, .4); }
 
+
+/* ===================== CARTA VIRTUAL (debajo del contador) ===================== */
+.cv { width: 100%; max-width: 640px; margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(255, 194, 204, .18); display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.cv [hidden] { display: none !important; }
+.cv button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.cv-step { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 16px; animation: fade .7s ease both; }
+.cv-title { font-family: var(--font-script); font-weight: 400; font-size: clamp(2.4rem, 8vw, 3.4rem); line-height: 1; margin: 0; text-wrap: balance; text-shadow: 0 0 28px rgba(255, 107, 136, .4); }
+.cv-hint { color: var(--ink-soft); font-style: italic; font-size: .98rem; }
+
+/* Paso 1: sello de cera */
+.cv-seal, .cv-hold {
+  position: relative; border: 0; cursor: pointer; color: #ffe9ec; font-family: var(--font-serif);
+  border-radius: 52% 48% 50% 50% / 50% 52% 48% 50%;
+  background: radial-gradient(circle at 35% 30%, var(--seal-hi), var(--seal) 60%, #5e0f1a);
+  box-shadow: 0 10px 24px rgba(0,0,0,.5), inset 0 -6px 10px rgba(0,0,0,.35), inset 0 4px 8px rgba(255,255,255,.18);
+}
+.cv-seal { width: 136px; height: 136px; display: grid; place-content: center; text-align: center; animation: sealpulse 2.6s ease-in-out infinite; }
+.cv-seal::before { content: ""; position: absolute; inset: 11px; border-radius: 50%; border: 2px dashed rgba(255, 233, 236, .45); }
+.cv-seal b { font-size: 2.4rem; line-height: 1; }
+.cv-seal span { font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; opacity: .85; }
+@keyframes sealpulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.cv-seal.break { animation: sealbreak .7s ease forwards; }
+@keyframes sealbreak { 35% { transform: scale(1.12) rotate(-6deg); } 100% { transform: scale(1.5) rotate(10deg); opacity: 0; } }
+
+/* Paso 2: pistas */
+.cv-clues { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.cv-clue {
+  text-align: left; display: flex; flex-direction: column; gap: 10px; min-width: 0; min-height: 104px; padding: 14px;
+  background: var(--bg-soft); color: var(--ink); border: 1px solid rgba(255, 194, 204, .25); border-radius: 14px;
+  font-family: var(--font-serif); font-size: .95rem; cursor: pointer; transition: transform .15s ease, border-color .2s ease;
+}
+.cv-clue:hover { transform: translateY(-2px); }
+.cv-clue .ico { width: 34px; height: 34px; border-radius: 50%; background: var(--pill); color: var(--pill-ink); display: grid; place-items: center; }
+.cv-clue .memo { font-family: var(--font-hand); font-size: 1.3rem; line-height: 1.25; color: var(--ink-soft); animation: fade .6s ease both; }
+.cv-clue.done { border-color: var(--pill); cursor: default; }
+.cv-clue.done:hover { transform: none; }
+.cv-dots { display: flex; gap: 8px; }
+.cv-dots i { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 194, 204, .25); transition: background .3s ease, transform .3s ease; }
+.cv-dots i.on { background: var(--heart); transform: scale(1.25); }
+
+/* Paso 3: hoja manuscrita */
+.cv-paper {
+  --lh: 2.15rem;
+  position: relative; width: 100%; text-align: left; transform: rotate(-.4deg);
+  background-color: var(--paper); color: var(--ink-hand); border-radius: 6px;
+  padding: var(--lh) 22px var(--lh) 54px;
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--lh) - 1px), var(--paper-line) calc(var(--lh) - 1px), var(--paper-line) var(--lh));
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .5);
+}
+.cv-paper::before { content: ""; position: absolute; top: 0; bottom: 0; left: 40px; width: 1px; background: rgba(190, 60, 70, .35); }
+.cv-greet, .cv-p, .cv-pd { font-family: var(--font-hand); font-size: 1.5rem; line-height: var(--lh); margin: 0 0 var(--lh); }
+.cv-greet { font-weight: 600; font-size: 1.7rem; }
+.cv-p { animation: ink .9s ease both; }
+@keyframes ink { from { opacity: 0; transform: translateY(8px); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
+.cv-sign { font-family: var(--font-script); font-size: 3.2rem; line-height: 1; text-align: right; margin: 0 0 var(--lh); animation: ink .9s ease both; }
+.cv-sign small { display: block; font-family: var(--font-hand); font-size: 1.3rem; }
+.cv-pd { margin: 0; font-weight: 600; animation: ink 1.2s ease both; }
+.cv-actions { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.cv-count { font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+
+/* Paso 4: cierre con sello a mantener */
+.cv-hold { width: 104px; height: 104px; display: grid; place-items: center; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.cv-hold svg { display: block; }
+.cv-hold .ring { position: absolute; inset: -8px; width: calc(100% + 16px); height: calc(100% + 16px); transform: rotate(-90deg); pointer-events: none; }
+.cv-hold .ring circle { fill: none; stroke: var(--pill); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 302; stroke-dashoffset: 302; transition: stroke-dashoffset .25s ease; }
+.cv-hold.holding .ring circle { stroke-dashoffset: 0; transition: stroke-dashoffset var(--hold, 1.4s) linear; }
+.cv-hold.done .ring circle { stroke-dashoffset: 0; transition: none; }
+.cv-hold.done { animation: sealpulse 1.8s ease-in-out infinite; cursor: default; }
+.cv-final { font-family: var(--font-script); font-size: clamp(2.4rem, 8vw, 3.2rem); line-height: 1; text-align: center; animation: fade .9s ease both; text-shadow: 0 0 28px rgba(255, 107, 136, .4); }
+
+@media (max-width: 520px) {
+  .cv-clues { grid-template-columns: 1fr; }
+  .cv-clue { min-height: 0; }
+  .cv-paper { --lh: 2rem; padding-left: 42px; padding-right: 16px; }
+  .cv-paper::before { left: 30px; }
+  .cv-greet, .cv-p, .cv-pd { font-size: 1.35rem; }
+  .cv-greet { font-size: 1.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-step, .cv-seal, .cv-p, .cv-sign, .cv-pd, .cv-clue .memo, .cv-final, .cv-hold.done { animation: none; }
+  .cv-seal.break { opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .screen.active, .heart-big, .letter p, .letter .signature { animation: none; }
   .fly, .pop { display: none; }
@@ -221,6 +310,47 @@ const FOTO_B64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAgICAg
   <div id="photo-wrap"></div>
   <p id="t-final-texto"></p>
   <div class="counter" id="counter"></div>
+
+  <!-- ===== CARTA VIRTUAL: 1 sello, 2 pistas, 3 carta, 4 cierre ===== -->
+  <section class="cv" id="cv" aria-label="Carta virtual">
+    <div class="cv-step" id="cv-paso1">
+      <h3 class="cv-title" id="cv-t1"></h3>
+      <button class="cv-seal" id="cv-seal" type="button" aria-label="Romper el sello para abrir">
+        <b id="cv-seal-num"></b><span id="cv-seal-eti"></span>
+      </button>
+      <p class="cv-hint" id="cv-h1"></p>
+    </div>
+
+    <div class="cv-step" id="cv-paso2" hidden>
+      <h3 class="cv-title" id="cv-t2"></h3>
+      <p class="cv-hint" id="cv-h2"></p>
+      <div class="cv-clues" id="cv-clues"></div>
+      <div class="cv-dots" id="cv-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p class="cv-hint" id="cv-prog" aria-live="polite"></p>
+      <button class="btn" id="cv-unlock" type="button" hidden></button>
+    </div>
+
+    <div class="cv-step" id="cv-paso3" hidden>
+      <article class="cv-paper" id="cv-paper">
+        <p class="cv-greet" id="cv-greet"></p>
+        <div id="cv-text"></div>
+        <div class="cv-sign" id="cv-sign" hidden></div>
+        <p class="cv-pd" id="cv-pd" hidden></p>
+      </article>
+      <div class="cv-actions" id="cv-actions">
+        <button class="btn" id="cv-next" type="button"></button>
+        <span class="cv-count" id="cv-count" aria-live="polite"></span>
+      </div>
+      <div class="cv-actions" id="cv-paso4" hidden>
+        <button class="cv-hold" id="cv-hold" type="button" aria-label="Mantén presionado el sello para cerrar la carta">
+          <svg class="ring" viewBox="0 0 110 110" aria-hidden="true"><circle cx="55" cy="55" r="48"/></svg>
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="#ffe9ec" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1.2 8.4 3 5 6.4 5c2 0 3.7 1.1 5.6 3.2C13.9 6.1 15.6 5 17.6 5 21 5 22.8 8.4 21.5 11.8 19.500 16.400 12 21 12 21z"/></svg>
+        </button>
+        <p class="cv-hint" id="cv-hold-hint"></p>
+        <p class="cv-final" id="cv-final" hidden></p>
+      </div>
+    </div>
+  </section>
   <button class="btn" data-go="s-inicio" id="b-volver">Volver a leer</button>
 </section>
 
@@ -243,7 +373,7 @@ const CONFIG = {
     // Si lo dejas vacío, se muestra una tarjeta con el nombre de la canción.
     embedUrl: "https://open.spotify.com/embed/track/3NTaEHQg5iVrRRNWlnK4RY",
     titulo: "Nuestra canción",
-    artista: "Escribe aquí el artista"
+    artista: ""
   },
 
   tituloCarta: "Para ti, Ari...",
@@ -269,6 +399,74 @@ const CONFIG = {
   tituloFinal: "Te prometo...",
   textoFinal: "Que voy a seguir eligiéndote cada día, Ari. Te amo.",
   foto: FOTO_B64   // La foto ya va incrustada en este mismo archivo
+};
+/* ============================================================ */
+
+
+/* ============================================================
+   CARTA VIRTUAL: aquí pegas lo que escribiste a puño y letra.
+   Solo cambia los textos entre comillas. No toques las llaves ni las comas.
+   Puedes usar {anios} y se cambia solo por el valor de CONFIG.anios.
+   ============================================================ */
+const CARTA_VIRTUAL = {
+
+  /* ---------- PASO 1: EL SELLO (guiño a los 730 días) ---------- */
+  sello: {
+    titulo: "Tengo algo más para ti",
+    numero: "730",                      // Número grabado en el sello
+    etiqueta: "días",                   // Texto pequeño bajo el número
+    pista: "Toca el sello para romperlo"
+  },
+
+  /* ---------- PASO 2: EL RETO (3 pistas que se tocan) ---------- */
+  reto: {
+    titulo: "Antes de abrirla, recuerda",
+    instruccion: "Toca las 3 pistas para desbloquear la carta",
+    completado: "Listo, ya puedes abrirla.",
+    botonAbrir: "Abrir la carta",
+    pistas: [
+      // icono puede ser: "nota", "lugar" o "estrella"
+      // titulo: lo que se ve antes de tocar. recuerdo: lo que aparece al tocar (1 o 2 líneas).
+      { icono: "nota",     titulo: "Nuestra canción", recuerdo: "No tenemos una canción favorita de la relación, pero cualquier tema que suene cuando estamos juntos ya se vuelve parte de lo nuestro" },
+      { icono: "lugar",    titulo: "Un lugar",        recuerdo: "Ese momento donde todo se pone en pausa por dos horas y estamos juntitos, abrazaditos, lejos de todo lo demás" },
+      { icono: "estrella", titulo: "Una risa",        recuerdo: "Siempre que te hago reír con mis sonseras y ese instante se queda grabado" }
+    ]
+  },
+
+  /* ---------- PASO 3: LA CARTA (se revela un párrafo por cada "Continuar") ---------- */
+  carta: {
+    saludo: `Mi ${CONFIG.nombreElla},`,   // Primera línea, se ve apenas se abre la hoja
+    botonContinuar: "Continuar",
+    parrafos: [
+      // Cada párrafo va entre comillas y termina con coma (el último puede ir sin coma).
+      // Puedes agregar o quitar párrafos copiando/borrando un bloque completo.
+
+      /* Párrafo 1: Apertura / el hito */
+      "Llegar hasta acá se siente especial. Dos años no son solo un número ni un contador avanzando; son un montón de días compartidos, de aprendizajes y de elegirnos incluso cuando el día viene pesado.",
+
+      /* Párrafo 2: Lo cotidiano y real */
+      "Me gusta lo simple que se vuelve estar contigo: conversar de cualquier cosa, apoyarnos en nuestras metas, reírnos de tonterías y tener ese espacio donde puedo ser tal cual soy.",
+
+      /* Párrafo 3: Lo que admiro de ti */
+      "Admiro tu forma de ser, tu constancia y cómo haces que los momentos normales se sientan distintos. Gracias por la paciencia, por los detalles y por estar tan presente en mi vida.",
+
+      /* Párrafo 4: Lo que hemos construido */
+      "No todo ha sido perfecto, pero sí real. Cada etapa que hemos pasado nos ha ido dando más complicidad y más razones para valorar lo que tenemos.",
+
+      /* Párrafo 5: Cierre y mirada adelante */
+      "Esta carta es solo una forma de dejarte por escrito lo que a veces se queda corto al decirlo rápido. Feliz aniversario, Ari... gracias por estos dos años y por todo lo que viene."
+    ],
+    firma: "Tu novio",                  // Firma grande, en letra cursiva
+    firmaNombre: CONFIG.tuNombre        // Nombre pequeño bajo la firma
+  },
+
+  /* ---------- PASO 4: EL CIERRE (mantener presionado el sello) ---------- */
+  cierre: {
+    pista: "Mantén presionado el sello para cerrar la carta",
+    msMantener: 1400,                   // Cuánto tiempo hay que mantener (milisegundos)
+    posdata: "",                        // Opcional: si escribes algo aquí, aparece en la hoja al cerrar el sello. Vacío = no se muestra
+    mensajeFinal: `Feliz aniversario, ${CONFIG.nombreElla}.`
+  }
 };
 /* ============================================================ */
 
@@ -416,6 +614,146 @@ function ambiente(activo) {
   clearInterval(ambienteId); ambienteId = null;
   if (activo && !reducido) ambienteId = setInterval(() => subir(1), 700);
 }
+
+/* ============================================================
+   CARTA VIRTUAL: lógica (no necesitas editar esto)
+   ============================================================ */
+(function () {
+  const C = CARTA_VIRTUAL;
+  const PASOS = ["cv-paso1", "cv-paso2", "cv-paso3"];
+  const ICONOS = {
+    nota: "M9 18V6l11-2v12a3 3 0 1 1-2-2.8V7.5L11 8.7V18a3 3 0 1 1-2-2.8z",
+    lugar: "M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z",
+    estrella: "M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17l-6.1 3.6 1.4-6.8L2.2 9.1l6.9-.8z"
+  };
+  const total = C.carta.parrafos.length;
+  let hechas = 0, idx = 0, listo = false, timer = null;
+
+  const ver = (id) => PASOS.forEach(p => { $(p).hidden = p !== id; });
+  const alVer = (el, bloque) => el.scrollIntoView({ behavior: reducido ? "auto" : "smooth", block: bloque || "center" });
+
+  /* Textos fijos */
+  $("cv-t1").textContent = fmt(C.sello.titulo);
+  $("cv-seal-num").textContent = C.sello.numero;
+  $("cv-seal-eti").textContent = C.sello.etiqueta;
+  $("cv-h1").textContent = C.sello.pista;
+  $("cv-t2").textContent = fmt(C.reto.titulo);
+  $("cv-h2").textContent = C.reto.instruccion;
+  $("cv-unlock").textContent = C.reto.botonAbrir;
+  $("cv-greet").textContent = C.carta.saludo;
+  $("cv-next").textContent = C.carta.botonContinuar;
+  $("cv-hold-hint").textContent = C.cierre.pista;
+  $("cv-hold").style.setProperty("--hold", C.cierre.msMantener / 1000 + "s");
+  $("cv-sign").innerHTML = esc(C.carta.firma) + "<small>" + esc(C.carta.firmaNombre) + "</small>";
+
+  /* Paso 2: las pistas */
+  const caja = $("cv-clues");
+  C.reto.pistas.forEach((p, i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "cv-clue";
+    b.innerHTML = '<span class="ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="' + (ICONOS[p.icono] || ICONOS.estrella) + '"/></svg></span>' +
+      "<span>" + esc(p.titulo) + '</span><span class="memo" hidden>' + esc(fmt(p.recuerdo)) + "</span>";
+    b.addEventListener("click", () => {
+      if (b.classList.contains("done")) return;
+      b.classList.add("done");
+      b.querySelector(".memo").hidden = false;
+      hechas++;
+      $("cv-dots").children[hechas - 1].classList.add("on");
+      subir(4);
+      if (hechas >= C.reto.pistas.length) {
+        $("cv-prog").textContent = C.reto.completado;
+        $("cv-unlock").hidden = false;
+        subir(10);
+        alVer($("cv-unlock"));
+      } else {
+        $("cv-prog").textContent = hechas + " de " + C.reto.pistas.length;
+      }
+    });
+    caja.appendChild(b);
+  });
+  $("cv-prog").textContent = "0 de " + C.reto.pistas.length;
+
+  /* Paso 1 -> 2 */
+  $("cv-seal").addEventListener("click", () => {
+    const s = $("cv-seal");
+    if (s.classList.contains("break")) return;
+    s.classList.add("break");
+    estallido(s); subir(10);
+    setTimeout(() => { ver("cv-paso2"); alVer($("cv-paso2"), "start"); }, reducido ? 0 : 650);
+  });
+
+  /* Paso 2 -> 3 */
+  $("cv-unlock").addEventListener("click", () => {
+    ver("cv-paso3");
+    alVer($("cv-paper"), "start");
+    siguiente();
+  });
+
+  /* Paso 3: un párrafo por cada "Continuar", lo anterior se queda visible */
+  function siguiente() {
+    if (idx >= total) return;
+    const p = document.createElement("p");
+    p.className = "cv-p";
+    p.textContent = fmt(C.carta.parrafos[idx]);
+    $("cv-text").appendChild(p);
+    idx++;
+    $("cv-count").textContent = "Parte " + idx + " de " + total;
+    if (idx >= total) {
+      $("cv-actions").hidden = true;
+      setTimeout(() => {
+        $("cv-sign").hidden = false;
+        $("cv-paso4").hidden = false;
+        alVer($("cv-paso4"), "end");
+      }, reducido ? 0 : 900);
+    }
+    alVer(p);
+  }
+  $("cv-next").addEventListener("click", siguiente);
+
+  /* Paso 4: mantener presionado el sello */
+  const sello = $("cv-hold");
+  function iniciar() {
+    if (listo || timer) return;
+    sello.classList.add("holding");
+    timer = setTimeout(completar, C.cierre.msMantener);
+  }
+  function cancelar() {
+    if (timer) { clearTimeout(timer); timer = null; }
+    sello.classList.remove("holding");
+  }
+  function completar() {
+    timer = null; listo = true;
+    sello.classList.remove("holding");
+    sello.classList.add("done");
+    $("cv-hold-hint").hidden = true;
+    if (C.cierre.posdata) { $("cv-pd").textContent = C.cierre.posdata; $("cv-pd").hidden = false; }
+    $("cv-final").textContent = C.cierre.mensajeFinal; $("cv-final").hidden = false;
+    estallido(sello); subir(30);
+    alVer($("cv-final"), "center");
+  }
+  sello.addEventListener("pointerdown", (e) => { e.preventDefault(); iniciar(); });
+  ["pointerup", "pointerleave", "pointercancel"].forEach(t => sello.addEventListener(t, cancelar));
+  sello.addEventListener("keydown", (e) => { if ((e.key === " " || e.key === "Enter") && !e.repeat) { e.preventDefault(); iniciar(); } });
+  sello.addEventListener("keyup", (e) => { if (e.key === " " || e.key === "Enter") cancelar(); });
+  sello.addEventListener("contextmenu", (e) => e.preventDefault());
+
+  /* Al tocar "Volver a leer", la carta vuelve a empezar */
+  $("b-volver").addEventListener("click", () => {
+    cancelar();
+    hechas = 0; idx = 0; listo = false;
+    $("cv-seal").classList.remove("break");
+    document.querySelectorAll(".cv-clue").forEach(b => { b.classList.remove("done"); b.querySelector(".memo").hidden = true; });
+    [...$("cv-dots").children].forEach(d => d.classList.remove("on"));
+    $("cv-prog").textContent = "0 de " + C.reto.pistas.length;
+    $("cv-unlock").hidden = true;
+    $("cv-text").innerHTML = "";
+    $("cv-sign").hidden = true; $("cv-pd").hidden = true;
+    $("cv-actions").hidden = false; $("cv-paso4").hidden = true;
+    $("cv-hold-hint").hidden = false; $("cv-final").hidden = true;
+    sello.classList.remove("done");
+    ver("cv-paso1");
+  });
+})();
 </script>
 </body>
 </html>
